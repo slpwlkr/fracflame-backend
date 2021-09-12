@@ -3,9 +3,24 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { User } from './users/entities/user.entity';
 
 @Module({
-  imports: [UsersModule, AuthModule],
+  imports: [
+    UsersModule,
+    AuthModule,
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: '057721MySQL',
+      database: 'fracflame',
+      entities: [User],
+      synchronize: true,
+    })
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

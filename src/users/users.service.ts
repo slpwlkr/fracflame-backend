@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, Connection } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
 
 // 仅测试用
-export type User = any;
+export type testUser = any;
 @Injectable()
 export class UsersService {
-  private readonly users = [
+  private readonly testUsers = [
     {
       userId: 1,
       username: 'user1',
@@ -19,16 +22,36 @@ export class UsersService {
     },
   ];
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user!';
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+    private connection: Connection
+  ) {}
+
+  async create(user: User) {
+    const queryRunner = this.connection.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      await queryRunner.manager.save(user);
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      // since we have errors lets rollback the changes we made
+      await queryRunner.rollbackTransaction();
+    } finally {
+      // you need to release a queryRunner which was manually instantiated
+      await queryRunner.release();
+    }
   }
 
-  findAll() {
-    return `This action returns all users!`;
+  findAll(): Promise<User[]> {
+    return this.usersRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} user!`;
+    return this.usersRepository.findOne(id);
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
@@ -40,6 +63,10 @@ export class UsersService {
   }
 
   async findOneByUsername(username: string): Promise<User | undefined> {
-    return this.users.find(user => user.username === username);
+    return this.usersRepository.findOne(
+      {
+        where: { username: username }
+      }
+    )
   }
 }
