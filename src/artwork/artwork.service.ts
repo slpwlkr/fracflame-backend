@@ -23,12 +23,11 @@ export class ArtworkService {
   }
 
   async findAll() {
-    return await this.artworkRepository.find({ relations: ["attractors", "attractors.variations"]})
+    return await this.artworkRepository.find()
   }
 
   async findByUserID(id: number) {
     return await this.artworkRepository.find({
-      relations: ["attractors", "attractors.variations"],
       where: {
         user: {
           userid: id
