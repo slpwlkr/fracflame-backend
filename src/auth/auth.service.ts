@@ -19,10 +19,20 @@ export class AuthService {
     return null;
   }
 
+  // auth/login接口配置了local-auth-guard，这里不用验证
   async login(user: any) {
     const payload = { username: user.username, sub: user.userId };
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async register(user: any) {
+    const localUser = await this.usersService.findOneByUsername(user.username)
+    if (localUser && Object.keys(localUser).length !== 0) {
+      return null;
+    }
+    const { password, ...result } = await this.usersService.create({ username: user.username, password: user.password });
+    return result;
   }
 }
