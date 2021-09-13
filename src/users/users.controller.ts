@@ -16,7 +16,9 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Get('/current')
   async findByToken(@Req() req) {
-    return await this.usersService.findOneByID(req.user.userid)
+    const user = await this.usersService.findOneByID(req.user.userid)
+    const {password, ...result} = user
+    return result
   }
 
   @UseGuards(JwtAuthGuard)
@@ -46,7 +48,9 @@ export class UsersController {
         }
       }
 
-      return await this.usersService.update(+id, data)
+      const user = await this.usersService.update(+id, data)
+      const {password, ...result} = user
+      return result
     } else {
       throw new HttpException({
         status: HttpStatus.BAD_REQUEST,

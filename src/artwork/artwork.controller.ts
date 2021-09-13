@@ -8,9 +8,10 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 export class ArtworkController {
   constructor(private readonly artworkService: ArtworkService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createArtworkDto: CreateArtworkDto) {
-    return this.artworkService.create(createArtworkDto);
+  async create(@Req() req) {
+    return await this.artworkService.createDefault(+req.user.userid);
   }
 
   @Get()

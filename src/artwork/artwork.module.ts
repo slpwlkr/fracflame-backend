@@ -5,10 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Artwork } from './entities/artwork.entity';
 import { Attractor } from './entities/attractor.entity';
 import { Variation } from './entities/variation.entity';
+import { UsersService } from 'src/users/users.service';
+import { User } from 'src/users/entities/user.entity';
 @Module({
-  imports: [TypeOrmModule.forFeature([Artwork, Attractor, Variation])],
+  imports: [TypeOrmModule.forFeature([Artwork, Attractor, Variation, User])],
   controllers: [ArtworkController],
-  providers: [ArtworkService],
+  providers: [ArtworkService, UsersService],
   exports: [ArtworkService, TypeOrmModule]
 })
 export class ArtworkModule {}

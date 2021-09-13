@@ -24,10 +24,10 @@ export class Artwork {
   @Column({ type: 'float' })
   gamma: number;
 
-  @Column()
+  @Column({ type: 'int' })
   created_at: number;
 
-  @Column()
+  @Column({ type: 'int' })
   last_updated_at: number;
 
   @OneToMany(() => Attractor, attractor => attractor.artwork)
