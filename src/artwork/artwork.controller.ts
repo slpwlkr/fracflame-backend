@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards, HttpStatus, HttpException } from '@nestjs/common';
 import { ArtworkService } from './artwork.service';
 import { CreateArtworkDto } from './dto/create-artwork.dto';
 import { UpdateArtworkDto } from './dto/update-artwork.dto';
@@ -26,8 +26,16 @@ export class ArtworkController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.artworkService.findOne(+id);
+  async findOne(@Req() req, @Param('id') id: string) {
+    const result = await this.artworkService.findOne(+id);
+    if(result && result.user.userid != req.user.userid) {
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: 'token userid does not match artwork userid'
+      }, HttpStatus.BAD_REQUEST)
+    } else {
+      return result
+    }
   }
 
   @Patch(':id')

@@ -37,13 +37,14 @@ export class ArtworkService {
     })
   }
 
-  async findAllAttractors() {
-    return await this.attractorRepository.find({ relations: ["artwork", "variations"]})
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} artwork`;
-  }
+  async findOne(id: number) {
+    return await this.artworkRepository.findOne({
+      relations: ["attractors", "attractors.variations"],
+      where: {
+        artworkid: id
+      }
+    })
+   }
 
   update(id: number, updateArtworkDto: UpdateArtworkDto) {
     return `This action updates a #${id} artwork`;
