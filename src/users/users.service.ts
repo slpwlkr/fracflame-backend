@@ -17,8 +17,10 @@ export class UsersService {
     return await this.usersRepository.find();
   }
 
-  async findOneByID(id: number): Promise<User | undefined> {
-    return await this.usersRepository.findOne(id);
+  async findOneByID(id: number) {
+    const user = await this.usersRepository.findOne(id);
+    const { password, ...result } = user;
+    return result;
   }
 
   async findOneByUsername(username: string): Promise<User | undefined> {

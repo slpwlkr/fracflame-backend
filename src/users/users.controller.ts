@@ -13,9 +13,10 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOneByID(+id);
+  @UseGuards(JwtAuthGuard)
+  @Get('/current')
+  async findByToken(@Req() req) {
+    return await this.usersService.findOneByID(req.user.userid)
   }
 
   @UseGuards(JwtAuthGuard)
