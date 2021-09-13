@@ -7,7 +7,10 @@ export class Attractor {
   @PrimaryGeneratedColumn()
   attractorid: number;
 
-  @ManyToOne(() => Artwork, artwork => artwork.attractors)
+  @ManyToOne(() => Artwork, artwork => artwork.attractors, {
+    cascade: true,
+    onDelete: 'CASCADE'
+  })
   @JoinColumn({name: 'artworkid'})
   artwork: Artwork;
 

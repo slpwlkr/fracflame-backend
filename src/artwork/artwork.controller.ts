@@ -44,8 +44,17 @@ export class ArtworkController {
     return this.artworkService.update(+id, updateArtworkDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.artworkService.remove(+id);
+  async remove(@Req() req, @Param('id') id: string) {
+    const result = await this.artworkService.findOne(+id);
+    if(result && result.user.userid != req.user.userid) {
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: 'token userid does not match artwork userid'
+      }, HttpStatus.BAD_REQUEST)
+    } else {
+      return this.artworkService.remove(+id);
+    }
   }
 }

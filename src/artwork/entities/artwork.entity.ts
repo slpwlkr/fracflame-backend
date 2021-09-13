@@ -7,7 +7,9 @@ export class Artwork {
   artworkid: number;
 
   @ManyToOne(() => User, {
-    eager: true
+    eager: true,
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinColumn({name: 'userid'})
   user: User;

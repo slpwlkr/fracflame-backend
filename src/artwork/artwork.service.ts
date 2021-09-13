@@ -118,7 +118,11 @@ export class ArtworkService {
     return `This action updates a #${id} artwork`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} artwork`;
+  async remove(id: number) {
+    await this.artworkRepository.delete(id)
+    return {
+      deleted: true,
+      deletedId: id
+    }
   }
 }

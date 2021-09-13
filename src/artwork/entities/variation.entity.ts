@@ -6,7 +6,10 @@ export class Variation {
   @PrimaryGeneratedColumn()
   variationid: number;
 
-  @ManyToOne(() => Attractor, attractor => attractor.variations)
+  @ManyToOne(() => Attractor, attractor => attractor.variations, {
+    cascade: true,
+    onDelete: 'CASCADE'
+  })
   @JoinColumn({name: 'attractorid'})
   attractor: Attractor
 
