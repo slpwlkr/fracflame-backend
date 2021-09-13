@@ -40,8 +40,12 @@ export class UsersService {
     return await this.findOneByUsername(user.username)
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user!`;
+  async update(id: number, data: UpdateUserDto) {
+    const updatedEntity = {}
+    Object.assign(updatedEntity, data.username ? { username: data.username } : {})
+    Object.assign(updatedEntity, data.password ? { password: data.password } : {})
+    await this.usersRepository.update(id, updatedEntity)
+    return await this.findOneByID(id)
   }
 
   async removeByID(id: number) {

@@ -31,4 +31,17 @@ export class UsersController {
       }, HttpStatus.BAD_REQUEST)
     }
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id')
+  async update(@Req() req, @Param('id') id: string, @Body() data: UpdateUserDto) {
+    if (req.user.userid === +id) {
+      return await this.usersService.update(+id, data)
+    } else {
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: 'user id does not match token'
+      }, HttpStatus.BAD_REQUEST)
+    }
+  }
 }
