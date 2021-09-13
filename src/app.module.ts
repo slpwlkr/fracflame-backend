@@ -8,6 +8,7 @@ import { User } from './users/entities/user.entity';
 import { ArtworkModule } from './artwork/artwork.module';
 import { Artwork } from './artwork/entities/artwork.entity';
 import { Attractor } from './artwork/entities/attractor.entity';
+import { Variation } from './artwork/entities/variation.entity';
 @Module({
   imports: [
     UsersModule,
@@ -19,7 +20,7 @@ import { Attractor } from './artwork/entities/attractor.entity';
       username: 'root',
       password: '057721MySQL',
       database: 'fracflame',
-      entities: [User, Artwork, Attractor],
+      entities: [User, Artwork, Attractor, Variation],
       synchronize: true,
     }),
     ArtworkModule
