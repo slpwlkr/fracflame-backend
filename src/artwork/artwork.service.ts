@@ -1,15 +1,25 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, Connection } from 'typeorm';
 import { CreateArtworkDto } from './dto/create-artwork.dto';
 import { UpdateArtworkDto } from './dto/update-artwork.dto';
-
+import { Artwork } from './entities/artwork.entity';
+import { Attractor } from './entities/attractor.entity';
 @Injectable()
 export class ArtworkService {
+  constructor(
+    @InjectRepository(Artwork)
+    private artworkRepository: Repository<Artwork>,
+    private attractorRepository : Repository<Attractor>,
+    private connection: Connection
+  ) {}
+
   create(createArtworkDto: CreateArtworkDto) {
     return 'This action adds a new artwork';
   }
 
-  findAll() {
-    return `This action returns all artwork`;
+  async findAll() {
+    return await this.artworkRepository.find({ relations: ["user", "attractors"]})
   }
 
   findOne(id: number) {

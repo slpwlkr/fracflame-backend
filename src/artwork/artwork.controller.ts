@@ -13,8 +13,8 @@ export class ArtworkController {
   }
 
   @Get()
-  findAll() {
-    return this.artworkService.findAll();
+  async findAll() {
+    return await this.artworkService.findAll();
   }
 
   @Get(':id')

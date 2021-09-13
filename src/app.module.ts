@@ -6,7 +6,8 @@ import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { User } from './users/entities/user.entity';
 import { ArtworkModule } from './artwork/artwork.module';
-
+import { Artwork } from './artwork/entities/artwork.entity';
+import { Attractor } from './artwork/entities/attractor.entity';
 @Module({
   imports: [
     UsersModule,
@@ -18,7 +19,7 @@ import { ArtworkModule } from './artwork/artwork.module';
       username: 'root',
       password: '057721MySQL',
       database: 'fracflame',
-      entities: [User],
+      entities: [User, Artwork, Attractor],
       synchronize: true,
     }),
     ArtworkModule
