@@ -21,9 +21,11 @@ export class AuthService {
 
   // auth/login接口配置了local-auth-guard，这里不用验证
   async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
+    const payload = { username: user.username, sub: user.userid };
     return {
       access_token: this.jwtService.sign(payload),
+      userid: user.userid,
+      username: user.username,
     };
   }
 

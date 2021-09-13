@@ -18,11 +18,11 @@ export class UsersService {
   }
 
   async findOneByID(id: number): Promise<User | undefined> {
-    return this.usersRepository.findOne(id);
+    return await this.usersRepository.findOne(id);
   }
 
   async findOneByUsername(username: string): Promise<User | undefined> {
-    return this.usersRepository.findOne(
+    return await this.usersRepository.findOne(
       {
         where: { username: username }
       }
@@ -30,12 +30,12 @@ export class UsersService {
   }
 
   async create(data: CreateUserDto) {
-    const user = this.usersRepository.create({
+    const user = await this.usersRepository.create({
       username: data.username,
       password: data.password
     });
-    this.usersRepository.save(user);
-    return user
+    await this.usersRepository.save(user);
+    return await this.findOneByUsername(user.username)
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
