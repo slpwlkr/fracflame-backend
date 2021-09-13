@@ -10,6 +10,7 @@ export class ArtworkService {
   constructor(
     @InjectRepository(Artwork)
     private artworkRepository: Repository<Artwork>,
+    @InjectRepository(Attractor)
     private attractorRepository : Repository<Attractor>,
     private connection: Connection
   ) {}

@@ -36,6 +36,16 @@ export class UsersController {
   @Patch(':id')
   async update(@Req() req, @Param('id') id: string, @Body() data: UpdateUserDto) {
     if (req.user.userid === +id) {
+      if (data.username) {
+        const localUser = await this.usersService.findOneByUsername(data.username)
+        if (localUser && Object.keys(localUser).length !== 0) {
+          throw new HttpException({
+            status: HttpStatus.BAD_REQUEST,
+            error: 'username already exists'
+          }, HttpStatus.BAD_REQUEST)
+        }
+      }
+
       return await this.usersService.update(+id, data)
     } else {
       throw new HttpException({

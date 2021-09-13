@@ -6,6 +6,10 @@ export class Variation {
   @PrimaryGeneratedColumn()
   variationid: number;
 
+  @ManyToOne(() => Attractor)
+  @JoinColumn({name: 'attractorid'})
+  attractor: Attractor
+
   @Column({ type: 'float' })
   weight: number
 
