@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards } from '@nestjs/common';
 import { ArtworkService } from './artwork.service';
 import { CreateArtworkDto } from './dto/create-artwork.dto';
 import { UpdateArtworkDto } from './dto/update-artwork.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('artwork')
 export class ArtworkController {
@@ -17,6 +18,13 @@ export class ArtworkController {
     return await this.artworkService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('my')
+  async findMyArtworks(@Req() req) {
+    return await this.artworkService.findByUserID(req.user.userid)
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.artworkService.findOne(+id);

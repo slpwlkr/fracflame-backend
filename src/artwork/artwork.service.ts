@@ -5,6 +5,7 @@ import { CreateArtworkDto } from './dto/create-artwork.dto';
 import { UpdateArtworkDto } from './dto/update-artwork.dto';
 import { Artwork } from './entities/artwork.entity';
 import { Attractor } from './entities/attractor.entity';
+import { Variation } from './entities/variation.entity';
 @Injectable()
 export class ArtworkService {
   constructor(
@@ -12,6 +13,8 @@ export class ArtworkService {
     private artworkRepository: Repository<Artwork>,
     @InjectRepository(Attractor)
     private attractorRepository : Repository<Attractor>,
+    @InjectRepository(Variation)
+    private variationRepository : Repository<Variation>,
     private connection: Connection
   ) {}
 
@@ -20,7 +23,22 @@ export class ArtworkService {
   }
 
   async findAll() {
-    return await this.artworkRepository.find({ relations: ["user", "attractors"]})
+    return await this.artworkRepository.find({ relations: ["attractors", "attractors.variations"]})
+  }
+
+  async findByUserID(id: number) {
+    return await this.artworkRepository.find({
+      relations: ["attractors", "attractors.variations"],
+      where: {
+        user: {
+          userid: id
+        }
+      }
+    })
+  }
+
+  async findAllAttractors() {
+    return await this.attractorRepository.find({ relations: ["artwork", "variations"]})
   }
 
   findOne(id: number) {

@@ -6,7 +6,9 @@ export class Artwork {
   @PrimaryGeneratedColumn()
   artworkid: number;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, {
+    eager: true
+  })
   @JoinColumn({name: 'userid'})
   user: User;
 

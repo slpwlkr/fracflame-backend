@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Artwork } from './artwork.entity';
+import { Variation } from './variation.entity';
 
 @Entity()
 export class Attractor {
@@ -39,4 +40,8 @@ export class Attractor {
 
   @Column()
   color_b: number;
+
+  @OneToMany(() => Variation, variation => variation.attractor)
+  @JoinColumn({ name: 'variationid' })
+  variations: Variation[]
 }
